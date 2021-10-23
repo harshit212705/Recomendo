@@ -25,6 +25,8 @@ class CustomUser(models.Model):
 
     username = models.CharField(max_length=50)
 
+    age = models.IntegerField(default=20)
+
     personality_type = models.PositiveSmallIntegerField(choices=PERSONALITY_TYPES)
 
     predicted_personality = models.PositiveSmallIntegerField(choices=PERSONALITY_TYPES, default=1)
@@ -33,7 +35,7 @@ class CustomUser(models.Model):
         verbose_name_plural = "CustomUsers"
 
     def __str__(self):
-        return str('UserID-- ') + str(self.pk) + str(' || Actual Personality-- ') + str(self.get_personality_type_display()) + str(' || Predicted Personality-- ') + str(self.get_predicted_personality_display()) + str(' || Username--') + str(self.username)
+        return str('UserID-- ') + str(self.pk) + str(' || Actual Personality-- ') + str(self.get_personality_type_display()) + str(' || Predicted Personality-- ') + str(self.get_predicted_personality_display()) + str(' || Username--') + str(self.username) + str(' || Age--') + str(self.age)
 
 
 
@@ -66,3 +68,29 @@ class Friendship(models.Model):
 
     def __str__(self):
         return str('User-- ') + str(self.user.pk) + str(' || Friend-- ') + str(self.friend.pk)
+
+
+
+class TagsOfInterest(models.Model):
+
+    tag_name = models.CharField(max_length=100)
+
+    class Meta:
+        verbose_name_plural = "Tags of Interest"
+
+    def __str__(self):
+        return str('TagID-- ') + str(self.pk) + str(' || Tag-- ') + str(self.tag_name)
+
+
+
+class UserInterestTags(models.Model):
+
+    user = models.ForeignKey(CustomUser, on_delete=models.PROTECT)
+
+    tag = models.ForeignKey(TagsOfInterest, on_delete=models.PROTECT, related_name='tag')
+
+    class Meta:
+        verbose_name_plural = "User Interest Tags"
+
+    def __str__(self):
+        return str('User-- ') + str(self.user.pk) + str(' || Tag-- ') + str(self.tag.tag_name)
