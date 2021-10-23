@@ -1,0 +1,26 @@
+.graph {
+  border-radius: 25px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  color: black;
+  background-color: #b1effd;
+  margin: 0;
+  position: relative;
+
+  -moz-box-flex: 1;
+  -webkit-flex: 1;
+  -moz-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  align-self: stretch !important;
+}
+
+.graph_container {
+  display: inline-block;
+  height: 100%;
+  width: 63%;
+  margin: auto 10px auto auto;
+  align-items: stretch !important;
+  align-self: stretch !important;
+}

@@ -1,0 +1,52 @@
+.panel {
+  border-radius: 25px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  row-gap: 5px;
+  font-size: calc(10px + 2vmin);
+  color: black;
+  background-color: #bebaf1;
+  margin: 0;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  height: 100% !important;
+  position: relative;
+
+  /* -moz-box-flex: 1;
+  -webkit-flex: 1;
+  -moz-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  align-self: stretch !important; */
+  align-items: center !important;
+}
+
+.panel-container {
+  display: inline-block;
+  height: 100%;
+  width: 33%;
+  margin: auto auto auto 10px;
+}
+
+.empty-panel:empty:before {
+  content: "Select a user to see what they've posted!";
+  margin: 0 50px 0 10px;
+  padding: 10px;
+  height: 50vh;
+  border-radius: 25px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  row-gap: 5px;
+  font-size: calc(10px + 2vmin);
+  color: black;
+  background-color: #bebaf1;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  height: 100% !important;
+  position: relative;
+  align-items: center !important;
+}

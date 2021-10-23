@@ -1,0 +1,47 @@
+.interestgroup::-webkit-scrollbar {
+  width: 9px;
+}
+.interestgroup {
+  scrollbar-width: thin;
+  scrollbar-color: var(--thumbBG) var(--scrollbarBG);
+}
+.interestgroup::-webkit-scrollbar-track {
+  background: var(--scrollbarBG);
+}
+.interestgroup::-webkit-scrollbar-thumb {
+  background-color: var(--thumbBG);
+  border-radius: 6px;
+  border: 3px solid var(--scrollbarBG);
+}
+
+.interestgroup {
+  display: flex;
+  align-content: space-between;
+  justify-content: safe space-evenly;
+  gap: 10px;
+  flex-flow: row wrap;
+  overflow-y: auto;
+  margin: 1px 0.75rem;
+  scroll-behavior: smooth;
+  width: 92%;
+  min-height: 6vh;
+  max-height: 10vh;
+  z-index: 11;
+  /* background-color: yellow; */
+}
+
+.userinfo button {
+  min-width: 45%;
+  margin: 10px;
+}
+
+.tag {
+  display: inline-block;
+  margin: auto;
+  height: fit-content;
+  padding: 3px 5px;
+  font-size: 12px;
+  font-weight: 500;
+  background-color: rgba(25, 228, 255, 0.534);
+  border-radius: 10px;
+}

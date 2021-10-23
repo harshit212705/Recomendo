@@ -1,0 +1,19 @@
+.userinfo {
+  margin-top: 0.75rem;
+  margin-left: 0.75rem;
+  margin-right: 0.75rem;
+  margin-bottom: 0;
+  height: 20%;
+  align-self: stretch;
+  /* background-color: chartreuse; */
+}
+
+.userinfo button {
+  min-width: 45%;
+  margin: 10px;
+}
+
+.userinfo .btn-group {
+  display: flex;
+  align-content: space-around;
+}
