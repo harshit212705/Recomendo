@@ -1,0 +1,65 @@
+.profile {
+  display: inline;
+  margin: 0.6rem;
+}
+
+.btn-default {
+  background-color: #d6d6d8;
+}
+.btn-active {
+  background-color: #b088f9;
+}
+.btn-friend {
+  background-color: #28bc25;
+}
+
+.btn-recommendation {
+  background-color: #fcd506;
+}
+
+.btn-circle {
+  width: 51px;
+  height: 51px;
+  padding: 10px 10px;
+  text-align: center;
+  font-size: 24px;
+  line-height: 1.33;
+  border-radius: 35px;
+  border-width: thin;
+  border-color: grey;
+}
+
+.profile button:hover {
+  transform: scale(1.4);
+}
+
+.friendstatus {
+  display: none;
+  font-weight: bolder;
+  font-size: 20px;
+  padding: 0 8px;
+  margin: 0;
+  border-radius: 20px;
+}
+
+.recommendation-score {
+  display: none;
+  font-weight: bold;
+  font-size: 12px;
+  padding: 0 8px;
+  margin: 0;
+  border-radius: 20px;
+  background-color: rgb(169, 112, 243);
+}
+
+.profile:hover .friendstatus {
+  display: block;
+  position: relative;
+  z-index: 1001;
+}
+
+.profile:hover .recommendation-score {
+  display: block;
+  position: relative;
+  z-index: 1000;
+}

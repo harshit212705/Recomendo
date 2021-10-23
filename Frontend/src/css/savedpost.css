@@ -1,0 +1,45 @@
+html {
+  --scrollbarBG: #bebaf1;
+  --thumbBG: #474749;
+}
+.savedpost::-webkit-scrollbar {
+  width: 9px;
+}
+.savedpost {
+  scrollbar-width: thin;
+  scrollbar-color: var(--thumbBG) var(--scrollbarBG);
+}
+.savedpost::-webkit-scrollbar-track {
+  background: var(--scrollbarBG);
+}
+.savedpost::-webkit-scrollbar-thumb {
+  background-color: var(--thumbBG);
+  border-radius: 6px;
+  border: 3px solid var(--scrollbarBG);
+}
+
+.savedpost {
+  display: flex;
+  flex-direction: column;
+  margin: 1px 0.75rem;
+  height: 50%;
+  align-self: stretch;
+  align-content: safe space-between;
+  justify-content: safe space-evenly;
+  /* background-color: yellow; */
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  min-height: 25vh;
+  max-height: 25vh;
+  z-index: 10;
+  border-radius: 10px;
+}
+
+.savedpost:empty:before {
+  content: "Nothing to see for now!";
+  margin: auto;
+}
+.savedpost:empty {
+  background: white;
+  border-radius: 10px;
+}
