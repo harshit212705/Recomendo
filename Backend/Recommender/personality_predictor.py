@@ -1,7 +1,7 @@
 import pickle
-from sklearn.svm import SVC,LinearSVC
-from sklearn.feature_extraction.text import TfidfVectorizer
-import pandas as pd
+# from sklearn.svm import SVC,LinearSVC
+# from sklearn.feature_extraction.text import TfidfVectorizer
+# import pandas as pd
 import re
 import urllib.request
 import json
@@ -18,8 +18,13 @@ nltk.download('stopwords')
 lemmatiser = WordNetLemmatizer() 
 cachedStopWords = stopwords.words("english")
 
-model_linear_svc = pickle.load(open('../Backend/trained_model/finalized_model.sav', 'rb'))
+# model_linear_svc = pickle.load(open('../Backend/trained_model/finalized_model.sav', 'rb'))
 vectorizer = pickle.load(open('../Backend/trained_model/vectorizer_model.pickle', 'rb'))
+
+svm_I_or_E = pickle.load(open('../Backend/trained_model/svm_model_I_or_E.sav', 'rb'))
+svm_N_or_S = pickle.load(open('../Backend/trained_model/svm_model_N_or_S.sav', 'rb'))
+svm_T_or_F = pickle.load(open('../Backend/trained_model/svm_model_T_or_F.sav', 'rb'))
+svm_P_or_J = pickle.load(open('../Backend/trained_model/svm_model_P_or_J.sav', 'rb'))
 
 
 def get_youtube_video_title(videoID):
@@ -79,5 +84,22 @@ def clean_post(post):
 
 def predict_personality(posts):
     test_post = vectorizer.transform([posts]).toarray()
-    predicted_target = model_linear_svc.predict(test_post)
-    return predicted_target[0]
+    # predicted_target = model_linear_svc.predict(test_post)
+
+    I_or_E_prediction = svm_I_or_E.predict(test_post)
+    N_or_S_prediction = svm_N_or_S.predict(test_post)
+    T_or_F_prediction = svm_T_or_F.predict(test_post)
+    J_or_P_prediction = svm_P_or_J.predict(test_post)
+
+    I_or_E_mapping = {0: 'E', 1: 'I'}
+    N_or_S_mapping = {0: 'N', 1: 'S'}
+    T_or_F_mapping = {0: 'F', 1: 'T'}
+    J_or_P_mapping = {0: 'J', 1: 'P'}
+
+    predicted_target = I_or_E_mapping[I_or_E_prediction[0]] + N_or_S_mapping[N_or_S_prediction[0]] + T_or_F_mapping[T_or_F_prediction[0]] + J_or_P_mapping[J_or_P_prediction[0]]
+    personality_mapping = {
+      'ENFJ': 0, 'ENFP': 1, 'ENTJ': 2, 'ENTP': 3, 'ESFJ': 4, 'ESFP': 5, 'ESTJ': 6, 'ESTP': 7, 
+      'INFJ': 8, 'INFP': 9, 'INTJ': 10, 'INTP': 11, 'ISFJ': 12, 'ISFP': 13, 'ISTJ': 14, 'ISTP': 15
+    }
+
+    return personality_mapping[predicted_target]

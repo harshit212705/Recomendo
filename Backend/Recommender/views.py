@@ -280,8 +280,72 @@ def get_personality_match_percent(user_personality, recommendation_personality):
     return percent
 
 
+def get_tags_match_percent(lst1, lst2):
+    lst3 = [value for value in lst1 if value in lst2]
+    percent = len(lst3) / min(len(lst1), len(lst2))
+    return percent
+
+
+
+# def find_recommendations(user_ref):
+#     friends = Friendship.objects.filter(Q(user=user_ref) | Q(friend=user_ref))
+    
+#     friends_list = []
+#     for friend in friends:
+#         if user_ref.pk == friend.user.pk:
+#             friend_id = friend.friend.pk
+#         else:
+#             friend_id = friend.user.id
+#         friends_list.append(friend_id)
+    
+#     friend_of_friends = Friendship.objects.filter(Q(user__in=friends_list) | Q(friend__in=friends_list)).exclude(Q(user=user_ref) | Q(friend=user_ref))
+    
+#     recommendations = {}
+#     for mf in friend_of_friends:
+#         first = mf.user.pk
+#         second = mf.friend.pk
+
+#         if first in friends_list:
+#             if second in recommendations.keys():
+#                 recommendations[second] += 1
+#             else:
+#                 recommendations.update({second: 1})
+#         else:
+#             if first in recommendations.keys():
+#                 recommendations[first] += 1
+#             else:
+#                 recommendations.update({first: 1})
+
+#     recommendations_personality = CustomUser.objects.filter(pk__in=recommendations.keys())
+#     user_personality_mapping = {}
+#     for person in recommendations_personality:
+#         user_personality_mapping[person.pk] = person.get_predicted_personality_display()
+
+#     scoring = {}
+
+#     for key in recommendations.keys():
+#         scoring[key] = recommendations[key]*0.5 + get_personality_match_percent(user_ref.get_predicted_personality_display(), user_personality_mapping[key])
+
+#     scoring = dict( sorted(scoring.items(), key=operator.itemgetter(1),reverse=True))
+
+#     max_value = max(scoring.values(), default=1)
+#     scoring = {k: v / max_value for k, v in scoring.items()}
+
+#     recommendation_list = [{key: val} for key, val in scoring.items() if val > 0.5]
+
+#     return recommendation_list
+
+
 
 def find_recommendations(user_ref):
+    FRIENDS_WEIGHTAGE = 40
+    PERSONALITY_WEIGHTAGE = 30
+    TAGS_WEIGHTAGE = 30
+    AGE_WEIGHTAGE = 20
+
+    scoring = {}
+    exclude_users_list = [user_ref.pk]
+
     friends = Friendship.objects.filter(Q(user=user_ref) | Q(friend=user_ref))
     
     friends_list = []
@@ -292,40 +356,63 @@ def find_recommendations(user_ref):
             friend_id = friend.user.id
         friends_list.append(friend_id)
     
+    exclude_users_list.extend(friends_list)
+
+    personality_data = CustomUser.objects.exclude(pk__in=exclude_users_list)
+    user_personality_mapping = {}
+    user_age_mapping = {}
+    for person in personality_data:
+        user_personality_mapping[person.pk] = person.get_predicted_personality_display()
+        user_age_mapping[person.pk] = person.age
+    
+
+    active_user_tags = []
+    tags_data = UserInterestTags.objects.filter(user=user_ref)
+    for obj in tags_data:
+        active_user_tags.append(obj.tag.pk)
+
+    user_tags_mapping = {}
+    tags_data = UserInterestTags.objects.exclude(user__in=exclude_users_list)
+    for obj in tags_data:
+        if obj.user.pk not in user_tags_mapping:
+            user_tags_mapping[obj.user.pk] = []
+        user_tags_mapping[obj.user.pk].append(obj.tag.pk)
+
+
     friend_of_friends = Friendship.objects.filter(Q(user__in=friends_list) | Q(friend__in=friends_list)).exclude(Q(user=user_ref) | Q(friend=user_ref))
     
-    recommendations = {}
+    user_friends_mapping = {}
+    for user_id in user_personality_mapping.keys():
+        user_friends_mapping[user_id] = 0
+
     for mf in friend_of_friends:
         first = mf.user.pk
         second = mf.friend.pk
 
         if first in friends_list:
-            if second in recommendations.keys():
-                recommendations[second] += 1
-            else:
-                recommendations.update({second: 1})
+            user_friends_mapping[second] += 1
         else:
-            if first in recommendations.keys():
-                recommendations[first] += 1
-            else:
-                recommendations.update({first: 1})
+            user_friends_mapping[first] += 1
 
-    recommendations_personality = CustomUser.objects.filter(pk__in=recommendations.keys())
-    user_personality_mapping = {}
-    for person in recommendations_personality:
-        user_personality_mapping[person.pk] = person.get_predicted_personality_display()
+    all_values = user_friends_mapping.values()
+    max_value_friends_mapping = max(all_values)
 
-    scoring = {}
+    for user_id in user_personality_mapping.keys():
+        scoring[user_id] = PERSONALITY_WEIGHTAGE * get_personality_match_percent(user_ref.get_predicted_personality_display(), user_personality_mapping[user_id]) + \
+                            TAGS_WEIGHTAGE * get_tags_match_percent(active_user_tags, user_tags_mapping[user_id]) + \
+                                AGE_WEIGHTAGE * (1 - (abs(user_ref.age - user_age_mapping[user_id]) / 100)) + \
+                                    FRIENDS_WEIGHTAGE * (user_friends_mapping[user_id] / max_value_friends_mapping)
+        
+        # print(user_id, get_personality_match_percent(user_ref.get_predicted_personality_display(), user_personality_mapping[user_id]), get_tags_match_percent(active_user_tags, user_tags_mapping[user_id]))
+        # print(1 - (abs(user_ref.age - user_age_mapping[user_id]) / 100), user_friends_mapping[user_id] / max_value_friends_mapping)
 
-    for key in recommendations.keys():
-        scoring[key] = recommendations[key]*0.5 + get_personality_match_percent(user_ref.get_predicted_personality_display(), user_personality_mapping[key])
 
     scoring = dict( sorted(scoring.items(), key=operator.itemgetter(1),reverse=True))
 
     max_value = max(scoring.values(), default=1)
-    scoring = {k: v / max_value for k, v in scoring.items()}
+    scoring = {k: round(v * 100 / max_value, 0) for k, v in scoring.items()}
 
-    recommendation_list = [{key: val} for key, val in scoring.items() if val > 0.5]
+    recommendation_list = [{key: val} for key, val in scoring.items() if val > 70]
 
     return recommendation_list
 
@@ -489,7 +576,7 @@ def get_friends_and_recommendations(request):
             recommendations = {}
             for item in user_recommendations:
                 for key, val in item.items():
-                    recommendations.update({key: float("{:.2f}".format(val))*100})
+                    recommendations.update({key: val})
             friends_and_recommendations.append(recommendations)
 
             context['data'] = friends_and_recommendations
