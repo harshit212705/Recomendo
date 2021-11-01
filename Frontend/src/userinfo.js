@@ -1,6 +1,7 @@
 import "./css/userinfo.css";
 import "./css/profile.css";
 import axios from "axios";
+import PersonalityModal from "./personalityModal.js";
 import { useState, useEffect } from "react/cjs/react.development";
 import { GET_USERINFO } from "./apis.js";
 
@@ -21,16 +22,14 @@ function UserInfo(props) {
   useEffect(() => {
     console.log(`UserInfo > getting userinfo...`);
     getUserInfo();
-  }, [props.activeUser]);
+  }, [props.activeUser, props.friendAndRecommendations]);
 
   return (
     <div className="userinfo">
       <span style={{ fontWeight: "bold", display: "block" }}>
         {userinfo.username}
       </span>
-      <span style={{ fontSize: "14px", fontWeight: "bold", display: "block" }}>
-        Personality Type: {userinfo.personality}
-      </span>
+      <PersonalityModal personality={userinfo.personality} />
       <span style={{ fontSize: "14px", fontWeight: "bold", display: "block" }}>
         Age: {userinfo.age}
       </span>

@@ -52,6 +52,7 @@ function Panel(props) {
       <div className="panel">
         <UserInfo
           activeUser={props.activeUser}
+          friendsAndRecommendations={props.friendAndRecommendations}
           showFriendsAndRecommendations={props.bridge}
         />
         <Lable lablename="Interest Groups" />

@@ -43,13 +43,14 @@
 }
 
 .recommendation-score {
-  display: none;
+  display: block;
   font-weight: bold;
   font-size: 12px;
   padding: 0 8px;
   margin: 0;
   border-radius: 20px;
-  background-color: rgb(169, 112, 243);
+  background-color: rgb(243, 147, 56);
+  z-index: 1001;
 }
 
 .profile:hover .friendstatus {
@@ -58,8 +59,13 @@
   z-index: 1001;
 }
 
-.profile:hover .recommendation-score {
+.tooltip-container {
+  position: absolute;
+  margin-left: -0.8rem;
+}
+
+/* .profile:hover .recommendation-score {
   display: block;
   position: relative;
   z-index: 1000;
-}
+} */

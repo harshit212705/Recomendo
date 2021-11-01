@@ -154,6 +154,8 @@ logs
 
 node_modules
 bower_components
+Backend/trained_model/*
+Frontend/package-lock.json
 
 *.sublime*
 

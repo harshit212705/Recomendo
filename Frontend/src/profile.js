@@ -39,7 +39,10 @@ function Profile(props) {
           {props.userid}
         </span>
       </button>
-      <div style={{ display: "inline-block", position: "absolute" }}>
+      <div
+        className="tooltip-container"
+        style={{ display: "inline-block", position: "absolute" }}
+      >
         <button
           type="button"
           className={`friendstatus btn btn-sm 	hvr-pulse`}
@@ -58,7 +61,8 @@ function Profile(props) {
         <span
           className={`recommendation-score btn btn-sm`}
           style={{
-            display: props.profileType === "btn-recommendation" ? "" : "none",
+            display:
+              props.profileType === "btn-recommendation" ? "block" : "none",
           }}
         >
           {props.recommendationScore}

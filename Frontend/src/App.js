@@ -1,6 +1,7 @@
 import "./css/App.css";
 import Graph from "./graph.js";
 import Panel from "./panel.js";
+// import PersonalityModal from "./personalityModal.js";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { GET_FRIENDS_AND_RECOMMENDATIONS } from "./apis.js";
@@ -42,7 +43,7 @@ function App() {
 
   useEffect(() => {
     if (activeUser !== null) {
-      console.log(`---------------------refreshing graph---------------`);
+      console.log(`------------------refreshing graph---------------`);
       showFriendsAndRecommendations();
     }
   }, [graphrerender]);
@@ -52,6 +53,7 @@ function App() {
     <div className="App">
       <h1>Recommending Friends on Personality and Connections</h1>
       <div className="content">
+        {/* <PersonalityModal /> */}
         <Graph
           activeUser={activeUser}
           bridge={bridgeGraphToApp}
@@ -60,6 +62,7 @@ function App() {
         />
         <Panel
           activeUser={activeUser}
+          friendsAndRecommendations={friendAndRecommendations}
           bridge={bridgePanelToApp}
           refreshGraph={refreshGraph}
         />
