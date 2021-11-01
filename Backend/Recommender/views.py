@@ -379,8 +379,8 @@ def find_recommendations(user_ref):
         user_tags_mapping[obj.user.pk].append(obj.tag.pk)
 
 
-    friend_of_friends = Friendship.objects.filter(Q(user__in=friends_list) | Q(friend__in=friends_list)).exclude(Q(user=user_ref) | Q(friend=user_ref))
-    
+    friend_of_friends = Friendship.objects.filter(Q(user__in=friends_list) | Q(friend__in=friends_list)).exclude(Q(user=user_ref) | Q(friend=user_ref)).exclude(Q(user__in=friends_list), Q(friend__in=friends_list))
+
     user_friends_mapping = {}
     for user_id in user_personality_mapping.keys():
         user_friends_mapping[user_id] = 0
