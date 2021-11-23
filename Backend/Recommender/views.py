@@ -287,56 +287,6 @@ def get_tags_match_percent(lst1, lst2):
 
 
 
-# def find_recommendations(user_ref):
-#     friends = Friendship.objects.filter(Q(user=user_ref) | Q(friend=user_ref))
-    
-#     friends_list = []
-#     for friend in friends:
-#         if user_ref.pk == friend.user.pk:
-#             friend_id = friend.friend.pk
-#         else:
-#             friend_id = friend.user.id
-#         friends_list.append(friend_id)
-    
-#     friend_of_friends = Friendship.objects.filter(Q(user__in=friends_list) | Q(friend__in=friends_list)).exclude(Q(user=user_ref) | Q(friend=user_ref))
-    
-#     recommendations = {}
-#     for mf in friend_of_friends:
-#         first = mf.user.pk
-#         second = mf.friend.pk
-
-#         if first in friends_list:
-#             if second in recommendations.keys():
-#                 recommendations[second] += 1
-#             else:
-#                 recommendations.update({second: 1})
-#         else:
-#             if first in recommendations.keys():
-#                 recommendations[first] += 1
-#             else:
-#                 recommendations.update({first: 1})
-
-#     recommendations_personality = CustomUser.objects.filter(pk__in=recommendations.keys())
-#     user_personality_mapping = {}
-#     for person in recommendations_personality:
-#         user_personality_mapping[person.pk] = person.get_predicted_personality_display()
-
-#     scoring = {}
-
-#     for key in recommendations.keys():
-#         scoring[key] = recommendations[key]*0.5 + get_personality_match_percent(user_ref.get_predicted_personality_display(), user_personality_mapping[key])
-
-#     scoring = dict( sorted(scoring.items(), key=operator.itemgetter(1),reverse=True))
-
-#     max_value = max(scoring.values(), default=1)
-#     scoring = {k: v / max_value for k, v in scoring.items()}
-
-#     recommendation_list = [{key: val} for key, val in scoring.items() if val > 0.5]
-
-#     return recommendation_list
-
-
-
 def find_recommendations(user_ref):
     FRIENDS_WEIGHTAGE = 40
     PERSONALITY_WEIGHTAGE = 30

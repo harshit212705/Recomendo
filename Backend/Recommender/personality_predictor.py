@@ -1,7 +1,4 @@
 import pickle
-# from sklearn.svm import SVC,LinearSVC
-# from sklearn.feature_extraction.text import TfidfVectorizer
-# import pandas as pd
 import re
 import urllib.request
 import json
@@ -18,7 +15,6 @@ nltk.download('stopwords')
 lemmatiser = WordNetLemmatizer() 
 cachedStopWords = stopwords.words("english")
 
-# model_linear_svc = pickle.load(open('../Backend/trained_model/finalized_model.sav', 'rb'))
 vectorizer = pickle.load(open('../Backend/trained_model/vectorizer_model.pickle', 'rb'))
 
 svm_I_or_E = pickle.load(open('../Backend/trained_model/svm_model_I_or_E.sav', 'rb'))
@@ -84,8 +80,7 @@ def clean_post(post):
 
 def predict_personality(posts):
     test_post = vectorizer.transform([posts]).toarray()
-    # predicted_target = model_linear_svc.predict(test_post)
-
+    
     I_or_E_prediction = svm_I_or_E.predict(test_post)
     N_or_S_prediction = svm_N_or_S.predict(test_post)
     T_or_F_prediction = svm_T_or_F.predict(test_post)
